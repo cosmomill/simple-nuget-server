@@ -35,16 +35,29 @@ chmod 0770 db packagefiles
  - Change "hhvm" to the name of a PHP upstream in your Nginx config. This can be regular PHP 5.4+ or HHVM.
  - If hosting as part of another site, prefix everything with a subdirectory and combine the config with your existing site's config (see ReactJS.NET config at the end of this comment)
 
-3 - Edit `inc/config.php` and change `ChangeThisKey` to a randomly-generated string
+3 - You can use Simple NuGet Server with Apache. To install mod_xsendfile read https://tn123.org/mod_xsendfile/.
+    Here is a sample virtual host configuration:
+```bash
+<VirtualHost *:80>
+  ServerName example.com
+  ServerAdmin webmaster@example.com
+  DocumentRoot "/var/www/simple-nuget-server/public/"
+  <Directory "/cluster/customers/webs/web1/htdocs/chocolatey">
+    XSendFilePath "/var/www/simple-nuget-server/packagefiles/"
+  </Directory>
+</VirtualHost>
+```
 
-4 - Enable the site (if creating a new site)
+4 - Edit `inc/config.php` and change `ChangeThisKey` to a randomly-generated string
+
+5 - Enable the site (if creating a new site)
 ```bash
 ln -s /etc/nginx/sites-available/nuget /etc/nginx/sites-enabled/nuget
 /etc/init.d/nginx reload
 ```
 
-5 - Set the API key and test it out. I test using nuget.exe (which is required for pushing)
-```
+6 - Set the API key and test it out. I test using nuget.exe (which is required for pushing)
+```bash
 nuget.exe setApiKey -Source http://example.com/ ChangeThisKey
 nuget.exe push Foo.nupkg -Source http://example.com/
 ```
