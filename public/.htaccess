@@ -1,0 +1,28 @@
+<Limit PUT>
+	Require all granted
+</Limit>
+
+<IfModule mod_xsendfile.c>
+	XSendFile on
+</IfModule>
+
+RewriteEngine on
+# edit this path for the base path of your repository
+RewriteBase /
+
+RewriteCond %{REQUEST_METHOD} =PUT
+RewriteRule ^$ push.php [L]
+
+RewriteCond %{REQUEST_METHOD} =PUT
+RewriteRule ^(.*)$ push.php?$1 [L]
+
+RewriteRule ^$ index.php [L]
+RewriteRule ^\$metadata$ metadata.xml [L]
+RewriteRule ^Search\(\)/\$count$ count.php [L]
+RewriteRule ^Search\(\)$ search.php [L]
+RewriteRule ^Packages\(\)$ search.php [L]
+RewriteRule ^Packages\(Id='([^']+)',Version='([^']+)'\)$ findByID.php?id=$1&version=$2 [L]
+RewriteRule ^GetUpdates\(\)$ updates.php [L]
+RewriteRule ^FindPackagesById\(\)$ findByID.php [L]
+RewriteRule ^download/([^/]+)/([^/]+)$ download.php?id=$1&version=$2 [L]
+RewriteRule ^api/v2/package/$ index.php [L]
