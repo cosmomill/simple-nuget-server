@@ -1,9 +1,12 @@
 <?php
 require(__DIR__ . '/../inc/core.php');
-require(__DIR__ . '/../inc/parseput.php');
+include_once(__DIR__ . '/../inc/class.stream.php');
 
 if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
-	parsePut();
+	$data = array();
+	new stream($data);
+	$_PUT = $data['post'];
+	$_FILES = $data['file'];
 }
 
 if (empty($_SERVER['HTTP_X_NUGET_APIKEY']) || $_SERVER['HTTP_X_NUGET_APIKEY'] != Config::$apiKey) {
